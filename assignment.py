@@ -1,21 +1,30 @@
 import pymysql
 
-def high_orders_Output():
+def high_orders():
     connection = pymysql.connect(
         host='localhost', user='root', passwd='worldcup7!',
         database = 'madang',port=3306, charset='utf8')
     
     try:
         with connection.cursor() as cursor:
-            sql = "SELECT bookname, name FROM Highorders;"
+            sql = """
+            CREATE VIEW Highorders
+            AS SELECT b.bookid, b.bookname, cs.name, b.publisher, od.saleprice
+            FROM Book b, Customer cs, Orders od
+            WHERE cs.custid=od.custid AND b.bookid=od.bookid AND od.saleprice = 20000;
+            """
             cursor.execute(sql)
+            
+            result = "SELECT * FROM Highorders;"
+            cursor.execute(result)
             data = cursor.fetchall()
             
             for rowdata in data:
-                print('{0}\t{1:<}'.format(rowdata[0],rowdata[1]))
+                print('{0}\t{1:<}\t{2:<}\t{3:<}\t{4:<}'.format(
+                    rowdata[0],rowdata[1],rowdata[2],rowdata[3],rowdata[4]))
             cursor.close()
     finally:
         connection.close()
 
 if __name__ == "__main__":
-    high_orders_Output()
+    high_orders()
