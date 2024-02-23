@@ -29,11 +29,13 @@ if conflag == True:
     data = cursor.fetchall()
 
     print("data의 타입=", type(data))
-    print('{0}\t{1:<} \t{2:<} \t{3:<}'.format('BOOK NO','BOOKNAME','PUBLISHER','PRICE'))
+    print('{0}\t{1:<} \t{2:<} \t{3:>}'.format('BOOK NO','BOOKNAME','PUBLISHER','PRICE'))
     
     # 레코드들 출력
     for rowdata in data:
-        print('{0}\t{1:<} \t{2:<} \t{3:<}'.format(rowdata[0],rowdata[1],rowdata[2],rowdata[3]))
+        if rowdata[3] is None:
+                    print('{0}\t{1:<} \t{2:<} \t{3:>}'.format(rowdata[0],rowdata[1],rowdata[2],0))
+        print('{0}\t{1:<} \t{2:<} \t{3:>}'.format(rowdata[0],rowdata[1],rowdata[2],rowdata[3]))
 
 cursor.close()
 conn.close()
